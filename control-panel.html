@@ -7,9 +7,12 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h2>Welcome to the Control Panel</h2>
-    <button id="user-panel-btn" style="display:none;">User Panel</button>
-    <button id="admin-panel-btn" style="display:none;">Admin Panel</button>
+    <h1>Welcome to the Control Panel</h1>
+
+    <!-- Buttons are hidden initially -->
+    <button id="user-panel-btn" style="display: none;" onclick="window.location.href='user-panel.html'">User Panel</button>
+    <button id="admin-panel-btn" style="display: none;" onclick="window.location.href='admin-panel.html'">Admin Panel</button>
+
     <button id="logout">Logout</button>
 
     <script src="firebase-config.js"></script>
