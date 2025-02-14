@@ -1,25 +1,33 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Ensure Firebase is available
-    if (typeof firebase !== "undefined") {
-        console.log("✅ Firebase SDK confirmed in control-panel.js");
-    } else {
+    if (typeof firebase === "undefined") {
         console.error("❌ Firebase not found in control-panel.js!");
+        return;
+    }
+
+    console.log("✅ Firebase SDK confirmed in control-panel.js");
+
+    // Ensure Firebase Auth and Firestore are available
+    if (!auth || !db) {
+        console.error("❌ Firebase services (auth, db) not initialized!");
         return;
     }
 
     auth.onAuthStateChanged(user => {
         if (user) {
             const uid = user.uid;
-
+            
             db.collection("users").doc(uid).get().then(doc => {
                 if (doc.exists) {
                     const role = doc.data().role;
+                    
+                    // Ensure buttons exist before modifying them
+                    const userPanelBtn = document.getElementById("user-panel-btn");
+                    const adminPanelBtn = document.getElementById("admin-panel-btn");
 
-                    // Show buttons based on role
-                    document.getElementById("user-panel-btn").style.display = "block";
-                    if (role === "admin") {
-                        document.getElementById("admin-panel-btn").style.display = "block";
-                    }
+                    if (userPanelBtn) userPanelBtn.style.display = "block";
+                    if (adminPanelBtn && role === "admin") adminPanelBtn.style.display = "block";
+
                 } else {
                     alert("Unauthorized Access!");
                     auth.signOut();
@@ -33,10 +41,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Logout
-    document.getElementById("logout").addEventListener("click", () => {
-        auth.signOut().then(() => {
-            window.location.href = "index.html";
+    // Logout event
+    const logoutBtn = document.getElementById("logout");
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+            auth.signOut().then(() => {
+                window.location.href = "index.html";
+            });
         });
-    });
+    } else {
+        console.error("❌ Logout button not found!");
+    }
 });
