@@ -1,5 +1,7 @@
-// Ensure Firebase is available before initializing
-if (typeof firebase !== "undefined") {
+// Ensure Firebase SDK is loaded
+if (typeof firebase === "undefined") {
+    console.error("❌ Firebase SDK not loaded. Check script order in index.html!");
+} else {
     console.log("✅ Firebase SDK loaded!");
 
     // Firebase Configuration
@@ -15,11 +17,9 @@ if (typeof firebase !== "undefined") {
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
 
-    // Global Firebase Variables
-    window.auth = firebase.auth();
-    window.db = firebase.firestore();
+    // Firebase services
+    window.auth = firebase.auth();  // ✅ Store globally
+    window.db = firebase.firestore(); // ✅ Store globally
 
     console.log("✅ Firebase initialized successfully!");
-} else {
-    console.error("❌ Firebase SDK not loaded. Check script order in index.html!");
 }
